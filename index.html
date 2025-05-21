@@ -1,45 +1,305 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Datos de Transferencia</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f8f8f8;
-      padding: 2rem;
-      max-width: 600px;
-      margin: auto;
-      color: #222;
-    }
-    .card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #0066cc;
-    }
-    .dato {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    code {
-      background: #eee;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baikal Dumplings - Tu Sabor Auténtico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos personalizados para la paleta de colores y tipografía */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7E7CE; /* Fondo claro similar al menú */
+            color: #4A2C00; /* Color de texto oscuro para contraste */
+        }
+        .header-bg {
+            background-color: #FFD700; /* Amarillo brillante del logo */
+        }
+        .nav-link:hover {
+            color: #8B4513; /* Marrón oscuro para hover */
+        }
+        .btn-primary {
+            background-color: #8B4513; /* Marrón oscuro para botones */
+            color: white;
+            border-radius: 9999px; /* Bordes redondeados */
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #A0522D; /* Tono más claro al pasar el ratón */
+        }
+        .card-bg {
+            background-color: #FFF8DC; /* Color crema para las tarjetas */
+        }
+        .footer-bg {
+            background-color: #4A2C00; /* Marrón oscuro para el pie de página */
+            color: white;
+        }
+        .menu-item-bg {
+            background-color: #FFD700; /* Fondo amarillo para los ítems del menú */
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1000;
+        }
+        .popup.show {
+            opacity: 1;
+        }
+        /* Animación para el menú desplegable */
+        .menu-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .menu-dropdown.open {
+            max-height: 500px; /* Ajusta según el contenido */
+            transition: max-height 0.7s ease-in;
+        }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <h2>Datos para transferencia</h2>
-    <div class="dato">CLABE: <code>123456789012345678</code></div>
-    <div class="dato">Beneficiario: <strong>Juan Pérez</strong></div>
-    <div class="dato">Banco: BBVA</div>
-  </div>
+<body class="min-h-screen flex flex-col">
+
+    <header class="header-bg shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center">
+            <img src="https://placehold.co/60x60/FFD700/4A2C00?text=LOGO" alt="Baikal Dumplings Logo" class="h-12 w-12 rounded-full mr-3">
+            <h1 class="text-2xl font-bold text-gray-800">Baikal Dumplings</h1>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+            <a href="#inicio" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300">Inicio</a>
+            <a href="#menu" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300">Menú</a>
+            <a href="#acerca-de" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300">Acerca de</a>
+            <a href="#pago" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300">Pago</a>
+            <a href="#contacto" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300">Contacto</a>
+        </nav>
+        <button id="mobile-menu-button" class="md:hidden text-gray-700 text-2xl focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div id="mobile-menu" class="menu-dropdown md:hidden bg-white shadow-lg">
+        <nav class="flex flex-col items-center py-4 space-y-4">
+            <a href="#inicio" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300 w-full text-center py-2">Inicio</a>
+            <a href="#menu" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300 w-full text-center py-2">Menú</a>
+            <a href="#acerca-de" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300 w-full text-center py-2">Acerca de</a>
+            <a href="#pago" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300 w-full text-center py-2">Pago</a>
+            <a href="#contacto" class="nav-link text-gray-700 font-semibold text-lg hover:text-gray-900 transition duration-300 w-full text-center py-2">Contacto</a>
+        </nav>
+    </div>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+
+        <section id="inicio" class="mb-12 text-center py-16">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-6">¡Bienvenido a Baikal Dumplings!</h2>
+            <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
+                Descubre el auténtico sabor de los dumplings caseros, hechos a mano con pasión y tradición.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6">
+                <a href="#menu" class="btn-primary text-xl md:text-2xl">Ver Menú</a>
+                <a href="#contacto" class="btn-primary text-xl md:text-2xl">Contáctanos</a>
+            </div>
+            <div class="mt-12">
+                <img src="https://placehold.co/1200x600/FFD700/4A2C00?text=Deliciosos+Dumplings" alt="Deliciosos Dumplings" class="rounded-lg shadow-lg mx-auto w-full max-w-4xl">
+            </div>
+        </section>
+
+        <section id="menu" class="mb-12 py-16">
+            <h2 class="text-4xl font-bold text-gray-800 text-center mb-10">Nuestro Menú</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card-bg p-6 rounded-lg shadow-lg">
+                    <h3 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-300 pb-2">DUMPLINGS</h3>
+                    <p class="text-gray-700 mb-6">Rellenos de carne de cerdo y verduras con base frita crujiente.</p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">DUMPLINGS 3 PZS</span>
+                            <span class="text-lg font-bold">$ 50.00</span>
+                        </div>
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">DUMPLINGS 6 PZS</span>
+                            <span class="text-lg font-bold">$ 85.00</span>
+                        </div>
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">DUMPLINGS 10 PZS</span>
+                            <span class="text-lg font-bold">$ 135.00</span>
+                        </div>
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">FAMILY DUMPLINGS 20 PZS</span>
+                            <span class="text-lg font-bold">$ 260.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-bg p-6 rounded-lg shadow-lg">
+                    <h3 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-300 pb-2">RAMEN + DUMPLINGS</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">RAMEN + 3 DUMPLINGS</span>
+                            <span class="text-lg font-bold">$ 120.00</span>
+                        </div>
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">RAMEN + 6 DUMPLINGS</span>
+                            <span class="text-lg font-bold">$ 155.00</span>
+                        </div>
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">RAMEN + 6 DUMPLINGS + HUEVO HERVIDO</span>
+                            <span class="text-lg font-bold">$ 170.00</span>
+                        </div>
+                    </div>
+                    <h3 class="text-3xl font-semibold text-gray-800 mt-8 mb-6 border-b-2 border-gray-300 pb-2">EXTRAS</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">DUMPLING ADICIONAL</span>
+                            <span class="text-lg font-bold">$ 20.00</span>
+                        </div>
+                        <div class="flex justify-between items-center menu-item-bg p-3 rounded-md">
+                            <span class="text-lg font-medium">HUEVO ADICIONAL</span>
+                            <span class="text-lg font-bold">$ 15.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="acerca-de" class="mb-12 py-16 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">Acerca de Nosotros</h2>
+            <p class="text-lg text-gray-700 max-w-3xl mx-auto">
+                En Baikal Dumplings, nos dedicamos a traer el auténtico sabor de los dumplings caseros a tu mesa. Cada dumpling es cuidadosamente preparado a mano, siguiendo recetas tradicionales para asegurar una experiencia culinaria inolvidable. Nuestra misión es ofrecerte no solo comida, sino una parte de nuestra cultura y pasión por la cocina.
+            </p>
+            <div class="mt-8">
+                <img src="https://placehold.co/800x400/FFD700/4A2C00?text=Nuestra+Historia" alt="Nuestra Historia" class="rounded-lg shadow-lg mx-auto w-full max-w-2xl">
+            </div>
+        </section>
+
+        <section id="pago" class="mb-12 py-16">
+            <h2 class="text-4xl font-bold text-gray-800 text-center mb-10">Método de Pago: Transferencia</h2>
+            <div class="card-bg p-6 rounded-lg shadow-lg max-w-xl mx-auto">
+                <p class="text-lg text-gray-700 mb-6 text-center">Para tu comodidad, aceptamos pagos por transferencia bancaria. Por favor, utiliza los siguientes datos:</p>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 rounded-md bg-white border border-gray-200 cursor-pointer" data-copy="123456789012345678" data-label="CLABE">
+                        <span class="text-lg font-medium text-gray-800">CLABE:</span>
+                        <code class="text-lg font-semibold text-gray-900">123456789012345678</code>
+                        <i class="fas fa-copy text-gray-500 hover:text-gray-700 ml-2"></i>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-md bg-white border border-gray-200 cursor-pointer" data-copy="Juan Pérez" data-label="Beneficiario">
+                        <span class="text-lg font-medium text-gray-800">Beneficiario:</span>
+                        <strong class="text-lg font-semibold text-gray-900">Juan Pérez</strong>
+                        <i class="fas fa-copy text-gray-500 hover:text-gray-700 ml-2"></i>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-md bg-white border border-gray-200">
+                        <span class="text-lg font-medium text-gray-800">Banco:</span>
+                        <span class="text-lg font-semibold text-gray-900">BBVA</span>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 mt-6 text-center">Haz clic en la CLABE o el Beneficiario para copiar el dato.</p>
+            </div>
+        </section>
+
+        <section id="contacto" class="mb-12 py-16 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6">Contáctanos</h2>
+            <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
+                ¿Tienes preguntas o quieres hacer un pedido? ¡Estamos aquí para ayudarte!
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8">
+                <div class="flex items-center text-gray-700 text-xl">
+                    <i class="fas fa-phone-alt mr-3 text-2xl"></i>
+                    <span>+52 55 1234 5678</span>
+                </div>
+                <div class="flex items-center text-gray-700 text-xl">
+                    <i class="fas fa-envelope mr-3 text-2xl"></i>
+                    <span>info@baikaldumplings.com</span>
+                </div>
+                <div class="flex items-center text-gray-700 text-xl">
+                    <i class="fas fa-map-marker-alt mr-3 text-2xl"></i>
+                    <span>Ciudad de México, México</span>
+                </div>
+            </div>
+            <div class="mt-10">
+                <h3 class="text-3xl font-semibold text-gray-800 mb-6">Síguenos en Redes Sociales</h3>
+                <div class="flex justify-center space-x-6 text-4xl">
+                    <a href="https://facebook.com" target="_blank" class="text-blue-600 hover:text-blue-800 transition duration-300"><i class="fab fa-facebook-square"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="text-pink-600 hover:text-pink-800 transition duration-300"><i class="fab fa-instagram-square"></i></a>
+                    <a href="https://twitter.com" target="_blank" class="text-blue-400 hover:text-blue-600 transition duration-300"><i class="fab fa-twitter-square"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer-bg py-8 px-6 text-center">
+        <div class="container mx-auto">
+            <p class="text-sm mb-4">&copy; 2024 Baikal Dumplings. Todos los derechos reservados.</p>
+            <p class="text-sm">Diseñado con <i class="fas fa-heart text-red-500"></i> por tu asistente de IA.</p>
+            <div class="mt-4">
+                <a href="#" class="text-white hover:underline text-sm mx-2">Política de Privacidad</a>
+                <span class="text-white text-sm">|</span>
+                <a href="#" class="text-white hover:underline text-sm mx-2">Términos de Servicio</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="copy-popup" class="popup">
+        <span id="popup-message"></span>
+    </div>
+
+    <script>
+        // JavaScript para el menú desplegable en móvil
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Cerrar el menú si se hace clic fuera o en un enlace
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        // JavaScript para la funcionalidad de copiar y el popup
+        const copyPopup = document.getElementById('copy-popup');
+        const popupMessage = document.getElementById('popup-message');
+
+        document.querySelectorAll('[data-copy]').forEach(element => {
+            element.addEventListener('click', async () => {
+                const textToCopy = element.getAttribute('data-copy');
+                const label = element.getAttribute('data-label');
+
+                try {
+                    // Usar document.execCommand('copy') como fallback para entornos restringidos
+                    const textarea = document.createElement('textarea');
+                    textarea.value = textToCopy;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+
+                    popupMessage.textContent = `${label} copiado!`;
+                    copyPopup.classList.add('show');
+                    setTimeout(() => {
+                        copyPopup.classList.remove('show');
+                    }, 2000); // El popup se cierra en 2 segundos
+                } catch (err) {
+                    console.error('Error al copiar el texto: ', err);
+                    popupMessage.textContent = `Error al copiar ${label}.`;
+                    copyPopup.classList.add('show');
+                    setTimeout(() => {
+                        copyPopup.classList.remove('show');
+                    }, 2000);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
